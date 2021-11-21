@@ -29,6 +29,32 @@ class Dataset_Interpreter(data.Dataset):
 			image = self.transforms(image)
 
 		return np.array(image), label
+
+
+class Dataset_Interpreter_flipped(data.Dataset):
+	def __init__(self, data_path, file_names, labels=None, transform=None):
+		self.data_path = data_path
+		self.file_names = file_names
+		self.labels = labels
+		self.transform = transform
+
+	transform = transforms.Compose([
+		transforms.ToPILImage(),
+		transforms.RandomHorizontalFlip(),
+		transforms.ToTensor()
+	])
+	def __len__(self):
+		return (len(self.file_names))
+
+	def __getitem__(self, idx):
+		img_name = f'{self.file_names.iloc[idx]}.jpg'
+		full_address = os.path.join(self.data_path, img_name)
+		image = Image.open(full_address)
+		label = self.labels.iloc[idx]
+		
+		image = self.transform(image)
+
+		return np.array(image), label
 # class PoseDataset(data.Dataset):
 # 	""" Pose custom dataset compatible with torch.utils.data.DataLoader. """
 # 	def __init__(self, annotation, imroot, hroot, oproot, vocab, seq_length, transform=None):
