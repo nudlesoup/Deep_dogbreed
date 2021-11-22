@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 #from torchvision import models
 from sklearn.metrics import confusion_matrix, classification_report
 
+np.set_printoptions(threshold=np.inf)
 SEED = 1234
 
 random.seed(SEED)
@@ -169,7 +170,7 @@ def main(args):
         transforms.Resize(32), transforms.CenterCrop(32), transforms.ToTensor(),
         normalize])
 
-    train_data = dataloader.Dataset_Interpreter(data_path=data_dir + 'train/', file_names=X_train, labels=y_train,
+    train_data = dataloader.Dataset_Interpreter_flipped(data_path=data_dir + 'train/', file_names=X_train, labels=y_train,
                                                 transforms=transform_train)
     valid_data = dataloader.Dataset_Interpreter(data_path=data_dir + 'train/', file_names=X_valid, labels=y_valid,
                                                 transforms=transform_test)
@@ -225,7 +226,7 @@ def main(args):
         print(f'Epoch: {epoch + 1:02}')
         print(f'\tTrain Loss: {train_loss:.3f} | Train Acc: {train_acc * 100:.2f}%')
         print(f'\t Val. Loss: {valid_loss:.3f} |  Val. Acc: {valid_acc * 100:.2f}%')
-        break
+
     # Test the model
     model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
     with torch.no_grad():
