@@ -32,13 +32,16 @@ class Dataset_Interpreter(data.Dataset):
 
 
 class Dataset_Interpreter_flipped(data.Dataset):
-	def __init__(self, data_path, file_names, labels=None, transform=None):
+	def __init__(self, data_path, file_names, labels=None):
 		self.data_path = data_path
 		self.file_names = file_names
 		self.labels = labels
 		self.transform = transform
 
-	transform = transforms.Compose([
+	transform = transforms.Compose([transforms.RandomResizedCrop(32, scale=(0.08, 1.0),
+                                                                       ratio=(3.0 / 4.0, 4.0 / 3.0)),
+                                          transforms.ToTensor(),
+                                          normalize,
 		transforms.ToPILImage(),
 		transforms.RandomHorizontalFlip(),
 		transforms.ToTensor()

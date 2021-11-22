@@ -151,15 +151,7 @@ def main(args):
     )
     X_valid, X_test, y_valid, y_test = train_test_split(X_valid, y_valid, test_size=0.7, random_state=SEED,
                                                         stratify=y_valid)
-    # transform_train = transforms.Compose([transforms.RandomResizedCrop(224, scale=(0.08, 1.0),
-    #                                                                    ratio=(3.0 / 4.0, 4.0 / 3.0)),
-    #                                       transforms.ToTensor(),
-    #                                       normalize
-    #                                       ])
-    #
-    # transform_test = transforms.Compose([
-    #     transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor(),
-    #     normalize])
+
     transform_train = transforms.Compose([transforms.RandomResizedCrop(32, scale=(0.08, 1.0),
                                                                        ratio=(3.0 / 4.0, 4.0 / 3.0)),
                                           transforms.ToTensor(),
@@ -170,8 +162,8 @@ def main(args):
         transforms.Resize(32), transforms.CenterCrop(32), transforms.ToTensor(),
         normalize])
 
-    train_data = dataloader.Dataset_Interpreter_flipped(data_path=data_dir + 'train/', file_names=X_train, labels=y_train,
-                                                transforms=transform_train)
+    train_data = dataloader.Dataset_Interpreter_flipped(data_path=data_dir + 'train/', file_names=X_train, labels=y_train
+                                                )
     valid_data = dataloader.Dataset_Interpreter(data_path=data_dir + 'train/', file_names=X_valid, labels=y_valid,
                                                 transforms=transform_test)
     test_data = dataloader.Dataset_Interpreter(data_path=data_dir + 'train/', file_names=X_test, labels=y_test,
