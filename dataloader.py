@@ -48,7 +48,7 @@ class Dataset_Interpreter_flipped(data.Dataset):
 		image = Image.open(full_address)
 		label = self.labels.iloc[idx]
 		
-		image = self.transform(image)
+		image = self.transforms(image)
 
 		return np.array(image), label
 # class PoseDataset(data.Dataset):
