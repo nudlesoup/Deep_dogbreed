@@ -38,6 +38,10 @@ class Dataset_Interpreter_flipped(data.Dataset):
 		self.labels = labels
 		self.transform = transform
 
+	normalize = transforms.Normalize(
+		mean=[0.485, 0.456, 0.406],
+		std=[0.229, 0.224, 0.225]
+	)
 	transform = transforms.Compose([transforms.RandomResizedCrop(32, scale=(0.08, 1.0),
                                                                        ratio=(3.0 / 4.0, 4.0 / 3.0)),
                                           transforms.ToTensor(),
