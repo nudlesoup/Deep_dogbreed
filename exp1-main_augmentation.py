@@ -153,9 +153,7 @@ def main(args):
                                                                  ratio=(3.0 / 4.0, 4.0 / 3.0)),
                                     transforms.ToTensor(),
                                     normalize,
-                                    transforms.ToPILImage(),
-                                    transforms.RandomHorizontalFlip(),
-                                    transforms.ToTensor()
+                                    transforms.RandomHorizontalFlip()
                                     ])
     X_valid, X_test, y_valid, y_test = train_test_split(X_valid, y_valid, test_size=0.7, random_state=SEED,
                                                         stratify=y_valid)
