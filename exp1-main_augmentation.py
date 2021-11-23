@@ -166,9 +166,16 @@ def main(args):
         transforms.Resize(32), transforms.CenterCrop(32), transforms.ToTensor(),
         normalize])
 
-    train_data = dataloader.Dataset_Interpreter_flipped(data_path=data_dir + 'train/', file_names=X_train, labels=y_train,
+    train_data1 = dataloader.Dataset_Interpreter(data_path=data_dir + 'train/', file_names=X_train,
+                                                       labels=y_train,
+                                                       transforms=transform_train
+                                                       )
+
+    train_data2 = dataloader.Dataset_Interpreter_flipped(data_path=data_dir + 'train/', file_names=X_train, labels=y_train,
     transforms = transform_train
     )
+
+    train_data = torch.utils.data.ConcatDataset([train_data1, train_data2])
     valid_data = dataloader.Dataset_Interpreter(data_path=data_dir + 'train/', file_names=X_valid, labels=y_valid,
                                                 transforms=transform_test)
     test_data = dataloader.Dataset_Interpreter(data_path=data_dir + 'train/', file_names=X_test, labels=y_test,
