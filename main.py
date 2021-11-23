@@ -165,6 +165,11 @@ def main(args):
     #                                       transforms.ToTensor(),
     #                                       normalize
     #                                       ])
+    transform_train = transforms.Compose([transforms.RandomResizedCrop(32, scale=(0.08, 1.0),
+                                                                       ratio=(3.0 / 4.0, 4.0 / 3.0)),
+                                          transforms.ToTensor(),
+                                          normalize
+                                          ])
     transform_train = transforms.Compose([
                                           transforms.ToTensor(),
                                           normalize
