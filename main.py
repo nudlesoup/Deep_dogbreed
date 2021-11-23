@@ -170,10 +170,6 @@ def main(args):
                                           transforms.ToTensor(),
                                           normalize
                                           ])
-    transform_train = transforms.Compose([
-                                          transforms.ToTensor(),
-                                          normalize
-                                          ])
     transform_test = transforms.Compose([
         transforms.Resize(32), transforms.CenterCrop(32), transforms.ToTensor(),
         normalize])
