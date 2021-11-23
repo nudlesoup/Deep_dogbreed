@@ -252,6 +252,7 @@ def main(args):
         print(confusion_mat)
         plot_confusion_matrix(cm=confusion_matrix(y_true=all_label, y_pred=all_pred),
                               classes=classes)
+    print('Test Accuracy of the model on the 2000 test images: {} %'.format(100 * correct / total))
 
 
 if __name__ == '__main__':
