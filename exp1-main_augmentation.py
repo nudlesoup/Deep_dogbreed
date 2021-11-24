@@ -149,12 +149,18 @@ def main(args):
         mean=[0.485, 0.456, 0.406],
         std=[0.229, 0.224, 0.225]
     )
-    transform_train = transforms.Compose([transforms.RandomResizedCrop(32, scale=(0.08, 1.0),
+    transform_train1 = transforms.Compose([transforms.RandomResizedCrop(32, scale=(0.08, 1.0),
+                                                                       ratio=(3.0 / 4.0, 4.0 / 3.0)),
+                                          transforms.ToTensor(),
+                                          normalize
+                                          ])
+    transform_train2 = transforms.Compose([transforms.RandomResizedCrop(32, scale=(0.08, 1.0),
                                                                  ratio=(3.0 / 4.0, 4.0 / 3.0)),
                                     transforms.ToTensor(),
                                     normalize,
                                     transforms.ToPILImage(),
-                                    transforms.RandomHorizontalFlip(),
+                                    transforms.RandomHorizontalFlip(0.6),
+                                    transforms.RandomVerticalFlip(0.6),
                                     transforms.ToTensor()
                                     ])
     X_valid, X_test, y_valid, y_test = train_test_split(X_valid, y_valid, test_size=0.7, random_state=SEED,
@@ -168,11 +174,11 @@ def main(args):
 
     train_data1 = dataloader.Dataset_Interpreter(data_path=data_dir + 'train/', file_names=X_train,
                                                        labels=y_train,
-                                                       transforms=transform_train
+                                                       transforms=transform_train1
                                                        )
 
     train_data2 = dataloader.Dataset_Interpreter_flipped(data_path=data_dir + 'train/', file_names=X_train, labels=y_train,
-    transforms = transform_train
+    transforms = transform_train2
     )
 
     train_data = torch.utils.data.ConcatDataset([train_data1, train_data2])
