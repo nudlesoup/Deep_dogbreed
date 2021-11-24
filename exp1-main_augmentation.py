@@ -151,9 +151,9 @@ def main(args):
     )
     transform_train = transforms.Compose([transforms.RandomResizedCrop(32, scale=(0.08, 1.0),
                                                                  ratio=(3.0 / 4.0, 4.0 / 3.0)),
-                                    transforms.ToTensor(),transforms.ToPILImage(),
+                                    transforms.ToPILImage(),
                                     normalize,
-                                    transforms.RandomHorizontalFlip()
+                                    transforms.RandomHorizontalFlip(),transforms.ToTensor()
                                     ])
     X_valid, X_test, y_valid, y_test = train_test_split(X_valid, y_valid, test_size=0.7, random_state=SEED,
                                                         stratify=y_valid)
