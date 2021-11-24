@@ -151,9 +151,11 @@ def main(args):
     )
     transform_train = transforms.Compose([transforms.RandomResizedCrop(32, scale=(0.08, 1.0),
                                                                  ratio=(3.0 / 4.0, 4.0 / 3.0)),
-                                    transforms.ToPILImage(),
+                                    transforms.ToTensor(),
                                     normalize,
-                                    transforms.RandomHorizontalFlip(),transforms.ToTensor()
+                                    transforms.ToPILImage(),
+                                    transforms.RandomHorizontalFlip(),
+                                    transforms.ToTensor()
                                     ])
     X_valid, X_test, y_valid, y_test = train_test_split(X_valid, y_valid, test_size=0.7, random_state=SEED,
                                                         stratify=y_valid)
@@ -186,8 +188,7 @@ def main(args):
     print(f'Number of validation examples: {len(valid_data)}')
     print(f'Number of testing examples: {len(test_data)}')
 
-    # model = models.basic_cnn.LeNet().to(device)
-    model = models.basic_cnn.ConvNet().to(device)
+    model = models.basic_cnn.LeNet().to(device)
 
     # model = models.resnet18(pretrained=True).to(device)
     # for name, param in model.named_parameters():
