@@ -159,8 +159,8 @@ def main(args):
                                     transforms.ToTensor(),
                                     normalize,
                                     transforms.ToPILImage(),
-                                    transforms.RandomHorizontalFlip(0.6),
-                                    transforms.RandomVerticalFlip(0.6),
+                                    transforms.RandomHorizontalFlip(0.4),
+                                    transforms.RandomVerticalFlip(0.4),
                                     transforms.ToTensor()
                                     ])
     X_valid, X_test, y_valid, y_test = train_test_split(X_valid, y_valid, test_size=0.7, random_state=SEED,
@@ -177,11 +177,11 @@ def main(args):
                                                        transforms=transform_train1
                                                        )
 
-    train_data2 = dataloader.Dataset_Interpreter_flipped(data_path=data_dir + 'train/', file_names=X_train, labels=y_train,
+    train_data = dataloader.Dataset_Interpreter_flipped(data_path=data_dir + 'train/', file_names=X_train, labels=y_train,
     transforms = transform_train2
     )
 
-    train_data = torch.utils.data.ConcatDataset([train_data1, train_data2])
+    #train_data = torch.utils.data.ConcatDataset([train_data1, train_data2])
     valid_data = dataloader.Dataset_Interpreter(data_path=data_dir + 'train/', file_names=X_valid, labels=y_valid,
                                                 transforms=transform_test)
     test_data = dataloader.Dataset_Interpreter(data_path=data_dir + 'train/', file_names=X_test, labels=y_test,
