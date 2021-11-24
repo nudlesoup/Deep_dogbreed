@@ -151,7 +151,7 @@ def main(args):
     )
     transform_train = transforms.Compose([transforms.RandomResizedCrop(32, scale=(0.08, 1.0),
                                                                  ratio=(3.0 / 4.0, 4.0 / 3.0)),
-                                    transforms.ToTensor(),
+                                    transforms.ToTensor(),transforms.ToPILImage(),
                                     normalize,
                                     transforms.RandomHorizontalFlip()
                                     ])
