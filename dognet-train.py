@@ -146,7 +146,7 @@ def main(args):
     print(f'Number of testing examples: {len(test_data)}')
 
 
-    model = models.basic_cnn_2.DogNet.to(device)
+    model = models.basic_cnn_2.DogNet().to(device)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
