@@ -189,7 +189,9 @@ def main(args):
     print(f'Number of testing examples: {len(test_data)}')
 
     #model = models.basic_cnn.LeNet().to(device)
-    model = models.basic_cnn.ConvNet().to(device)
+    #model = models.basic_cnn.ConvNet().to(device)
+    model = models.basic_cnn.Net().to(device)
+
 
     # model = models.resnet18(pretrained=True).to(device)
     # for name, param in model.named_parameters():
