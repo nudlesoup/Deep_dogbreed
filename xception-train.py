@@ -169,13 +169,14 @@ def main(args):
     print(f'Number of testing examples: {len(test_data)}')
 
     model=models.densenet121(pretrained=True).to(device)
-    num_ftrs = model.classifier.in_features
-    model.classifier = nn.Linear(num_ftrs, 120).to(device)
+
 
     for name, param in model.named_parameters():
         if ("bn" not in name):
             param.requires_grad = False
 
+    num_ftrs = model.classifier.in_features
+    model.classifier = nn.Linear(num_ftrs, 120).to(device)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
