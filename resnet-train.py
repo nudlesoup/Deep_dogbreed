@@ -15,7 +15,7 @@ from torch.autograd import Variable
 import time
 import dataloader
 import matplotlib.pyplot as plt
-#from torchvision import models
+from torchvision import models
 from sklearn.metrics import confusion_matrix, classification_report
 
 #np.set_printoptions(threshold=np.inf)
