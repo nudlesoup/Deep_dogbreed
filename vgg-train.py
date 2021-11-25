@@ -173,7 +173,7 @@ def main(args):
     for name, param in model.named_parameters():
         if ("bn" not in name):
             param.requires_grad = False
-    model.fc = nn.Linear(model.fc.in_features, 120).to(device)
+    model.classifier[6] = nn.Linear(model.fc.in_features, 120).to(device)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
