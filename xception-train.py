@@ -168,7 +168,7 @@ def main(args):
     print(f'Number of validation examples: {len(valid_data)}')
     print(f'Number of testing examples: {len(test_data)}')
 
-    model=models.inception_v3(pretrained=True).to(device)
+    model=models.xception(pretrained=True).to(device)
     for name, param in model.named_parameters():
         if ("bn" not in name):
             param.requires_grad = False
