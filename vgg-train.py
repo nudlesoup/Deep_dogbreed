@@ -51,7 +51,7 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.savefig('dogtrain-confusionmatrix-vgg-normal.png')
+    plt.savefig('dogtrain-confusionmatrix-vgg-normal-grey.png')
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -138,7 +138,7 @@ def main(args):
     X_valid, X_test, y_valid, y_test = train_test_split(X_valid, y_valid, test_size=0.7, random_state=SEED,
                                                         stratify=y_valid)
 
-    transform_train = transforms.Compose([
+    transform_train = transforms.Compose([transforms.Grayscale(num_output_channels=3),
             transforms.RandomRotation(20),
             transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
@@ -146,7 +146,7 @@ def main(args):
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
 
-    transform_test = transforms.Compose([
+    transform_test = transforms.Compose([transforms.Grayscale(num_output_channels=3),
             transforms.Resize(256),
             transforms.CenterCrop(224),
             transforms.ToTensor(),
