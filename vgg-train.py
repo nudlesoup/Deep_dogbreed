@@ -235,7 +235,7 @@ def main(args):
         print(classification_report(all_label, all_pred, target_names=classes))
         confusion_mat = confusion_matrix(y_true=all_label, y_pred=all_pred)
         f = open("vgg-confusion-matrix-grey-{}.txt".format(args.name), "w")
-        f.write(confusion_mat)
+        f.write(str(confusion_mat))
         f.close()
         print(confusion_mat)
         plot_confusion_matrix(cm=confusion_matrix(y_true=all_label, y_pred=all_pred),
