@@ -160,7 +160,7 @@ def main(args):
                                           normalize
                                           ])
     transform_test = transforms.Compose([
-        transforms.functional.rgb_to_grayscale(num_output_channels=3),
+        transforms.Grayscale(num_output_channels=3),
         transforms.Resize(32), transforms.CenterCrop(32), transforms.ToTensor(),
         normalize])
 
