@@ -14,9 +14,8 @@ from torchvision import transforms
 from torch.autograd import Variable
 import time
 import dataloader
-import models.basic_cnn_2
 import matplotlib.pyplot as plt
-#from torchvision import models
+import torchvision.models as models
 from sklearn.metrics import confusion_matrix, classification_report
 
 #np.set_printoptions(threshold=np.inf)
@@ -52,7 +51,7 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.savefig('dogtrain-confusionmatrix-normal.png')
+    plt.savefig('dogtrain-confusionmatrix-vgg-normal.png')
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -138,18 +137,14 @@ def main(args):
     )
     X_valid, X_test, y_valid, y_test = train_test_split(X_valid, y_valid, test_size=0.7, random_state=SEED,
                                                         stratify=y_valid)
+
     transform_train = transforms.Compose([
-        transforms.RandomResizedCrop(224),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ])
-    # transform_train = transforms.Compose([
-    #         transforms.RandomRotation(20),
-    #         transforms.RandomResizedCrop(224),
-    #         transforms.RandomHorizontalFlip(),
-    #         transforms.ToTensor(),
-    #         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    #     ])
+            transforms.RandomRotation(20),
+            transforms.RandomResizedCrop(224),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
 
     transform_test = transforms.Compose([
             transforms.Resize(256),
@@ -174,7 +169,11 @@ def main(args):
     print(f'Number of testing examples: {len(test_data)}')
 
 
-    model = models.basic_cnn_2.DogNet().to(device)
+    model=models.vgg19(pretrained=True).to(device)
+    for name, param in model.named_parameters():
+        if ("bn" not in name):
+            param.requires_grad = False
+    model.fc = nn.Linear(model.fc.in_features, 120).to(device)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
