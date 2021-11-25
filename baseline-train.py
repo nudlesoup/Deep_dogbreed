@@ -53,7 +53,7 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.savefig('confusionmatrix.png')
+    plt.savefig('confusionmatrix-grey.png')
 
 def plot_training_statistics(train_stats, model_name):
     fig, axes = plt.subplots(2, figsize=(15, 15))
@@ -155,7 +155,7 @@ def main(args):
 
     transform_train = transforms.Compose([transforms.RandomResizedCrop(32, scale=(0.08, 1.0),
                                                                        ratio=(3.0 / 4.0, 4.0 / 3.0)),
-                                          transforms.functional.rgb_to_grayscale(num_output_channels=3),
+                                          transforms.Grayscale(num_output_channels=3),
                                           transforms.ToTensor(),
                                           normalize
                                           ])
