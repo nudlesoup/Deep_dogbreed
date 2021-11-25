@@ -221,9 +221,9 @@ def main(args):
         if valid_loss < best_valid_loss:
             best_valid_loss = valid_loss
             torch.save(model.state_dict(), 'model_best_{}.pth.tar'.format(epoch))
-        print(f'Epoch: {epoch + 1:02}')
-        print(f'\tTrain Loss: {train_loss:.3f} | Train Acc: {train_acc * 100:.2f}%')
-        print(f'\t Val. Loss: {valid_loss:.3f} |  Val. Acc: {valid_acc * 100:.2f}%')
+        # print(f'Epoch: {epoch + 1:02}')
+        # print(f'\tTrain Loss: {train_loss:.3f} | Train Acc: {train_acc * 100:.2f}%')
+        # print(f'\t Val. Loss: {valid_loss:.3f} |  Val. Acc: {valid_acc * 100:.2f}%')
         #break
     # Test the model
     model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
@@ -249,7 +249,7 @@ def main(args):
         all_label = torch.tensor(all_labels)
         print(classification_report(all_label, all_pred, target_names=classes))
         confusion_mat = confusion_matrix(y_true=all_label, y_pred=all_pred)
-        print(confusion_mat)
+        #print(confusion_mat)
         plot_confusion_matrix(cm=confusion_matrix(y_true=all_label, y_pred=all_pred),
                               classes=classes)
         print('Test Accuracy of the model on the 2000 test images: {} %'.format(100 * correct / total))
