@@ -51,7 +51,7 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.savefig('dogtrain-confusionmatrix-normal-grey.png')
+    plt.savefig('resnet-confusionmatrix-normal-grey.png'.format(args.name))
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -234,6 +234,9 @@ def main(args):
         print(classification_report(all_label, all_pred, target_names=classes))
         confusion_mat = confusion_matrix(y_true=all_label, y_pred=all_pred)
         print(confusion_mat)
+        f = open("resnet-confusion-matrix-grey-{}.txt".format(args.name), "w")
+        f.write(str(confusion_mat))
+        f.close()
         plot_confusion_matrix(cm=confusion_matrix(y_true=all_label, y_pred=all_pred),
                               classes=classes)
         print('Test Accuracy of the model on the 2000 test images: {} %'.format(100 * correct / total))
@@ -246,6 +249,7 @@ if __name__ == '__main__':
     parser.add_argument('--image_dir', type=str, default='images/', help='directory for resized images')
     parser.add_argument('--learning_rate', type=float, default=0.001)
     parser.add_argument('--crop_size', type=int, default=224, help='size for randomly cropping images')
+    parser.add_argument('--name',type=str,required=True)
 
     parser.add_argument('--num_epochs', type=int, default=30)
     parser.add_argument('--batch_size', type=int, default=32)
