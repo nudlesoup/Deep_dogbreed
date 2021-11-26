@@ -51,7 +51,7 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.savefig('dogtrain-confusionmatrix-vgg-normal-grey-{}.png'.format(args.name))
+    plt.savefig('vgg-confusionmatrix-normal-{}.png'.format(args.name))
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -138,15 +138,15 @@ def main(args):
     X_valid, X_test, y_valid, y_test = train_test_split(X_valid, y_valid, test_size=0.7, random_state=SEED,
                                                         stratify=y_valid)
 
-    transform_train = transforms.Compose([transforms.Grayscale(num_output_channels=3),
+    transform_train = transforms.Compose([
             transforms.RandomRotation(20),
             transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
-
-    transform_test = transforms.Compose([transforms.Grayscale(num_output_channels=3),
+    #transforms.Grayscale(num_output_channels=3),
+    transform_test = transforms.Compose([
             transforms.Resize(256),
             transforms.CenterCrop(224),
             transforms.ToTensor(),
@@ -234,7 +234,7 @@ def main(args):
         all_label = torch.tensor(all_labels)
         print(classification_report(all_label, all_pred, target_names=classes))
         confusion_mat = confusion_matrix(y_true=all_label, y_pred=all_pred)
-        f = open("vgg-confusion-matrix-grey-{}.txt".format(args.name), "w")
+        f = open("vgg-confusion-matrix-{}.txt".format(args.name), "w")
         f.write(str(confusion_mat))
         f.close()
         print(confusion_mat)
