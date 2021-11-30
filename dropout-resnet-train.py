@@ -174,7 +174,7 @@ def main(args):
     #model= Resnet18().to(device)
     model = models.resnet18(pretrained=True).to(device)
     model.fc = nn.Sequential(
-        nn.Dropout(0.5),
+        nn.Dropout(0.1),
         nn.Linear(model.fc.in_features, 120)
     ).to(device)
     #model = models.resnet18(pretrained=True).to(device)
