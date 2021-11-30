@@ -180,10 +180,14 @@ def main(args):
     for name, module in model.named_modules():
         # prune 20% of connections in all 2D-conv layers
         if isinstance(module, torch.nn.Conv2d):
-            prune.l1_unstructured(module, name='weight', amount=0.3)
+           # prune.l1_unstructured(module, name='weight', amount=0.3)
+            prune.l1_unstructured(module, name='weight', amount=0.5)
+
         # prune 40% of connections in all linear layers
         elif isinstance(module, torch.nn.Linear):
-            prune.l1_unstructured(module, name='weight', amount=0.4)
+           # prune.l1_unstructured(module, name='weight', amount=0.4)
+            prune.l1_unstructured(module, name='weight', amount=0.5)
+
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
