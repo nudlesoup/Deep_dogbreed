@@ -167,7 +167,7 @@ def main(args):
     print(f'Number of training examples: {len(train_data)}')
     print(f'Number of validation examples: {len(valid_data)}')
     print(f'Number of testing examples: {len(test_data)}')
-    model = models.vgg19(pretrained=True)
+    model = models.vgg19(pretrained=True).to(device)
     feats_list = list(model.features)
     new_feats_list = []
     for feat in feats_list:
@@ -176,7 +176,7 @@ def main(args):
             new_feats_list.append(nn.Dropout(p=0.5, inplace=True))
 
     # modify convolution layers
-    model.features = nn.Sequential(*new_feats_list)
+    model.features = nn.Sequential(*new_feats_list).to(device)
     model.classifier[6] = nn.Linear(4096, 120).to(device)
 
     # model=models.vgg19(pretrained=True).to(device)
