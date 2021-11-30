@@ -53,7 +53,7 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.savefig('dogtrain-confusionmatrix-normal-gray.png')
+    plt.savefig('pruning-dogtrain-confusionmatrix-normal-gray.png')
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
