@@ -23,8 +23,9 @@ import torch.nn as nn
 
 class Resnet18(nn.Module):
     def __init__(self):
-        super(EfficientNet_b0, self).__init__()
-        self.model = pretrainedmodels.__dict__['resnet18'](pretrained='imagenet')
+        super(Resnet18, self).__init__()
+        #self.model = pretrainedmodels.__dict__['resnet18'](pretrained='imagenet')
+        self.model =models.resnet18(pretrained=True)
 
         self.classifier_layer = nn.Sequential(
             nn.Linear(512, 256),
