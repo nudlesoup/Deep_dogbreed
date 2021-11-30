@@ -24,6 +24,9 @@ SEED = 1234
 random.seed(SEED)
 np.random.seed(SEED)
 
+import torch.nn.utils.prune as prune
+
+
 torch.cuda.manual_seed(SEED)
 torch.manual_seed(7)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
