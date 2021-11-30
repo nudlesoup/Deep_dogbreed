@@ -51,7 +51,7 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.savefig('pruning-vgg-confusionmatrix-normal-{}.png'.format(args.name))
+    plt.savefig('dropout-vgg-confusionmatrix-normal-{}.png'.format(args.name))
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -167,20 +167,23 @@ def main(args):
     print(f'Number of training examples: {len(train_data)}')
     print(f'Number of validation examples: {len(valid_data)}')
     print(f'Number of testing examples: {len(test_data)}')
+    model = models.vgg19(pretrained=True)
+    feats_list = list(model.features)
+    new_feats_list = []
+    for feat in feats_list:
+        new_feats_list.append(feat)
+        if isinstance(feat, nn.Conv2d):
+            new_feats_list.append(nn.Dropout(p=0.5, inplace=True))
 
-
-    model=models.vgg19(pretrained=True).to(device)
-    for name, param in model.named_parameters():
-        if ("bn" not in name):
-            param.requires_grad = False
+    # modify convolution layers
+    model.features = nn.Sequential(*new_feats_list)
     model.classifier[6] = nn.Linear(4096, 120).to(device)
-    for name, module in model.named_modules():
-        # prune 20% of connections in all 2D-conv layers
-        if isinstance(module, torch.nn.Conv2d):
-            prune.l1_unstructured(module, name='weight', amount=0.7)
-        # prune 40% of connections in all linear layers
-        elif isinstance(module, torch.nn.Linear):
-            prune.l1_unstructured(module, name='weight', amount=0.7)
+
+    # model=models.vgg19(pretrained=True).to(device)
+    # for name, param in model.named_parameters():
+    #     if ("bn" not in name):
+    #         param.requires_grad = False
+    # model.classifier[6] = nn.Linear(4096, 120).to(device)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
@@ -241,7 +244,7 @@ def main(args):
         all_label = torch.tensor(all_labels)
         print(classification_report(all_label, all_pred, target_names=classes))
         confusion_mat = confusion_matrix(y_true=all_label, y_pred=all_pred)
-        f = open("pruning-vgg-confusion-matrix-{}.txt".format(args.name), "w")
+        f = open("dropout-vgg-confusion-matrix-{}.txt".format(args.name), "w")
         f.write(str(confusion_mat))
         f.close()
         print(confusion_mat)
