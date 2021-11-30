@@ -18,7 +18,6 @@ import matplotlib.pyplot as plt
 from torchvision import models
 from sklearn.metrics import confusion_matrix, classification_report
 
-import torch.nn.utils.prune as prune
 import torch.nn as nn
 
 
