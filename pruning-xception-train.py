@@ -27,6 +27,7 @@ np.random.seed(SEED)
 torch.cuda.manual_seed(SEED)
 torch.manual_seed(7)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+import torch.nn.utils.prune as prune
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
