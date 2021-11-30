@@ -177,6 +177,9 @@ def main(args):
 
     # modify convolution layers
     model.features = nn.Sequential(*new_feats_list).to(device)
+    for name, param in model.named_parameters():
+        if ("bn" not in name):
+            param.requires_grad = False
     model.classifier[6] = nn.Linear(4096, 120).to(device)
 
     # model=models.vgg19(pretrained=True).to(device)
