@@ -174,6 +174,13 @@ def main(args):
         if ("bn" not in name):
             param.requires_grad = False
     model.classifier[6] = nn.Linear(4096, 120).to(device)
+    for name, module in model.named_modules():
+        # prune 20% of connections in all 2D-conv layers
+        if isinstance(module, torch.nn.Conv2d):
+            prune.l1_unstructured(module, name='weight', amount=0.7)
+        # prune 40% of connections in all linear layers
+        elif isinstance(module, torch.nn.Linear):
+            prune.l1_unstructured(module, name='weight', amount=0.7)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
