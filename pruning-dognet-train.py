@@ -176,7 +176,13 @@ def main(args):
 
 
     model = models.basic_cnn_2.DogNet().to(device)
-    prune.random_unstructured(model, name="weight", amount=0.3)
+    for name, module in model.named_modules():
+        # prune 20% of connections in all 2D-conv layers
+        if isinstance(module, torch.nn.Conv2d):
+            prune.l1_unstructured(module, name='weight', amount=0.3)
+        # prune 40% of connections in all linear layers
+        elif isinstance(module, torch.nn.Linear):
+            prune.l1_unstructured(module, name='weight', amount=0.4)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
