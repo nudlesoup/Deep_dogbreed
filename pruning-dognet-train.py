@@ -176,7 +176,7 @@ def main(args):
 
 
     model = models.basic_cnn_2.DogNet().to(device)
-    prune.random_unstructured(module, name="weight", amount=0.3)
+    prune.random_unstructured(model, name="weight", amount=0.3)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
