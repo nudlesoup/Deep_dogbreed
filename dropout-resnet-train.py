@@ -21,30 +21,6 @@ from sklearn.metrics import confusion_matrix, classification_report
 import torch.nn as nn
 
 
-class Resnet18(nn.Module):
-    def __init__(self):
-        super(Resnet18, self).__init__()
-        #self.model = pretrainedmodels.__dict__['resnet18'](pretrained='imagenet')
-        resnet =models.resnet18(pretrained=True)
-        modules = list(resnet.children())[:-1]  # delete the last fc layer.
-        resnet = nn.Sequential(*modules)
-        ### Now set requires_grad to false
-        for param in resnet.parameters():
-            param.requires_grad = False
-
-        self.classifier_layer = nn.Sequential(
-            nn.Linear(512, 256),
-            nn.BatchNorm1d(256),
-            nn.Dropout(0.4),
-            nn.Linear(256, 120)
-        )
-
-    def forward(self, x):
-        batch_size, _, _, _ = x.shape  # taking out batch_size from input image
-        x = self.model.features(x)
-        x = torch.nn.functional.adaptive_avg_pool2d(x, 1).reshape(batch_size, -1)  # then reshaping the batch_size
-        x = self.classifier_layer(x)
-        return x
 
 #np.set_printoptions(threshold=np.inf)
 SEED = 1234
@@ -195,7 +171,12 @@ def main(args):
     print(f'Number of training examples: {len(train_data)}')
     print(f'Number of validation examples: {len(valid_data)}')
     print(f'Number of testing examples: {len(test_data)}')
-    model= Resnet18().to(device)
+    #model= Resnet18().to(device)
+    model = models.resnet18(pretrained=True).to(device)
+    model.fc = nn.Sequential(
+        nn.Dropout(0.5),
+        nn.Linear(model.fc.in_features, 120)
+    ).to(device)
     #model = models.resnet18(pretrained=True).to(device)
     # for name, param in model.named_parameters():
     #     if ("bn" not in name):
