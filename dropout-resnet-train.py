@@ -25,7 +25,7 @@ class Resnet18(nn.Module):
     def __init__(self):
         super(Resnet18, self).__init__()
         #self.model = pretrainedmodels.__dict__['resnet18'](pretrained='imagenet')
-        self.resnet =models.resnet18(pretrained=True)
+        resnet =models.resnet18(pretrained=True)
         modules = list(resnet.children())[:-1]  # delete the last fc layer.
         resnet = nn.Sequential(*modules)
         ### Now set requires_grad to false
