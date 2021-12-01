@@ -43,7 +43,7 @@ class DogNet(nn.Module):
 class DogNetDrop(nn.Module):
     ### TODO: choose an architecture, and complete the class
     def __init__(self):
-        super(DogNet, self).__init__()
+        super(DogNetDrop, self).__init__()
         ## Define layers of a CNN
 
         self.layer1 = nn.Sequential(
