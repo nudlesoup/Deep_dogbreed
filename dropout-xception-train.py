@@ -177,8 +177,8 @@ def main(args):
 
     num_ftrs = model.classifier.in_features
     model.classifier = nn.Sequential(
-        nn.Dropout(0.1),
-        nn.Linear(model.fc.in_features, 120)
+        nn.Dropout(0.5),
+        nn.Linear(num_ftrs, 120)
     ).to(device)
     #model.classifier = nn.Linear(num_ftrs, 120).to(device)
 
