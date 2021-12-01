@@ -169,7 +169,15 @@ def main(args):
     print(f'Number of testing examples: {len(test_data)}')
 
     model=models.densenet121(pretrained=True).to(device)
+    feats_list = list(model.features)
+    new_feats_list = []
+    for feat in feats_list:
+        new_feats_list.append(feat)
+        if isinstance(feat, nn.Conv2d):
+            new_feats_list.append(nn.Dropout(p=0.5, inplace=True))
 
+    # modify convolution layers
+    model.features = nn.Sequential(*new_feats_list).to(device)
 
     for name, param in model.named_parameters():
         if ("bn" not in name):
