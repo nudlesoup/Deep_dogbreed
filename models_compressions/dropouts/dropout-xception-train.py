@@ -51,7 +51,7 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.savefig('pruning-xception-confusionmatrix-normal-{}.png'.format(args.name))
+    plt.savefig('dropout-xception-confusionmatrix-normal-{}.png'.format(args.name))
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -176,7 +176,11 @@ def main(args):
             param.requires_grad = False
 
     num_ftrs = model.classifier.in_features
-    model.classifier = nn.Linear(num_ftrs, 120).to(device)
+    model.classifier = nn.Sequential(
+        nn.Dropout(0.1),
+        nn.Linear(model.fc.in_features, 120)
+    ).to(device)
+    #model.classifier = nn.Linear(num_ftrs, 120).to(device)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
@@ -238,7 +242,7 @@ def main(args):
         print(classification_report(all_label, all_pred, target_names=classes))
         confusion_mat = confusion_matrix(y_true=all_label, y_pred=all_pred)
         print(confusion_mat)
-        f = open("pruning-xception-confusion-matrix-{}.txt".format(args.name), "w")
+        f = open("dropout-xception-confusion-matrix-{}.txt".format(args.name), "w")
         f.write(str(confusion_mat))
         f.close()
         plot_confusion_matrix(cm=confusion_matrix(y_true=all_label, y_pred=all_pred),
