@@ -141,9 +141,9 @@ def main(args):
     transform_train = transforms.Compose([
             transforms.Resize(256),
             transforms.CenterCrop(224),
-            # transforms.RandomRotation(20),
-            # transforms.RandomResizedCrop(224),
-            # transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation(20),
+            transforms.RandomResizedCrop(224),
+            transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
@@ -237,7 +237,7 @@ def main(args):
         confusion_mat = confusion_matrix(y_true=all_label, y_pred=all_pred)
         #print(confusion_mat)
         #f = open("resnet-confusion-matrix-{}.txt".format(args.name), "w")
-        with open("resnet-confusion-matrix-{}.txt".format(args.name), 'w') as f:
+        with open("resnet-dataaug-confusion-matrix-{}.txt".format(args.name), 'w') as f:
             f.write(np.array2string(confusion_mat, separator=', '))
         # f.write(str(confusion_mat))
         f.close()
