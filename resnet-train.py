@@ -235,7 +235,7 @@ def main(args):
         all_label = torch.tensor(all_labels)
         print(classification_report(all_label, all_pred, target_names=classes))
         confusion_mat = confusion_matrix(y_true=all_label, y_pred=all_pred)
-        print(confusion_mat)
+        #print(confusion_mat)
         #f = open("resnet-confusion-matrix-{}.txt".format(args.name), "w")
         with open("resnet-confusion-matrix-{}.txt".format(args.name), 'w') as f:
             f.write(np.array2string(confusion_mat, separator=', '))
