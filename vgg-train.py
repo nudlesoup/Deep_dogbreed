@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 import torchvision.models as models
 from sklearn.metrics import confusion_matrix, classification_report
 
-#np.set_printoptions(threshold=np.inf)
+np.set_printoptions(threshold=np.inf)
 SEED = 1234
 
 random.seed(SEED)
@@ -234,10 +234,12 @@ def main(args):
         all_label = torch.tensor(all_labels)
         print(classification_report(all_label, all_pred, target_names=classes))
         confusion_mat = confusion_matrix(y_true=all_label, y_pred=all_pred)
-        f = open("vgg-confusion-matrix-{}.txt".format(args.name), "w")
-        f.write(str(confusion_mat))
+        with open("vgg-dataaug-confusion-matrix-{}.txt".format(args.name), 'w') as f:
+            f.write(np.array2string(confusion_mat, separator=', '))
+        # f = open("vgg-dataaug-confusion-matrix-{}.txt".format(args.name), "w")
+        # f.write(str(confusion_mat))
         f.close()
-        print(confusion_mat)
+        #print(confusion_mat)
         plot_confusion_matrix(cm=confusion_matrix(y_true=all_label, y_pred=all_pred),
                               classes=classes)
         print('Test Accuracy of the model on the 2000 test images: {} %'.format(100 * correct / total))
