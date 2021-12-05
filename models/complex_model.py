@@ -39,6 +39,7 @@ class Complex(nn.Module):
         y = F.relu(y)
         y = F.adaptive_avg_pool2d(y, (1, 1))
         y = y.view(y.size(0), -1)
+        y = nn.functional.relu(self.dfc1(y))
 
         x = torch.cat((x, y), 1)
         x = nn.functional.relu(self.final_fc1(x))
