@@ -135,7 +135,7 @@ class ComplexDogAlex(nn.Module):
                 param.requires_grad = False
 
 
-        self.dfc1 = nn.Linear(1024, 512)
+        self.dfc1 = nn.Linear(512, 512)
 
         self.final_fc1 = nn.Linear(1024, 512)
         self.final_fc2 = nn.Linear(512, 120)
