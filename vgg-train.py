@@ -267,7 +267,7 @@ def main(args):
                 some_pred.append(all_pred[i])
                 some_label.append(all_label[i])
 
-        print(classification_report(all_label, all_pred, target_names=classes))
+        #print(classification_report(all_label, all_pred, target_names=classes))
         confusion_mat = confusion_matrix(y_true=some_label, y_pred=some_pred)
         # with open("vgg-dataaug-confusion-matrix-{}.txt".format(args.name), 'w') as f:
         #     f.write(np.array2string(confusion_mat, separator=', '))
