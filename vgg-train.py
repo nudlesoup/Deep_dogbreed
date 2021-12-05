@@ -20,7 +20,9 @@ from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.metrics import plot_confusion_matrix
 np.set_printoptions(threshold=np.inf)
 SEED = 1234
-
+import pandas as pd
+import seaborn as sn
+import matplotlib.pyplot as plt
 random.seed(SEED)
 np.random.seed(SEED)
 
@@ -268,15 +270,22 @@ def main(args):
                 some_label.append(all_label[i])
 
         #print(classification_report(all_label, all_pred, target_names=classes))
-        confusion_mat = confusion_matrix(y_true=some_label, y_pred=some_pred)
+        cfm = confusion_matrix(y_true=some_label, y_pred=some_pred)
         # with open("vgg-dataaug-confusion-matrix-{}.txt".format(args.name), 'w') as f:
         #     f.write(np.array2string(confusion_mat, separator=', '))
         # # f = open("vgg-dataaug-confusion-matrix-{}.txt".format(args.name), "w")
         # # f.write(str(confusion_mat))
         # f.close()
         #print(confusion_mat)
-        cfm_plot = plot_confusion_matrix(cm=confusion_mat,classes=classes)
-        cfm_plot.savefig("cfm.png")
+        # cfm_plot = plot_confusion_matrix(cm=confusion_mat,classes=classes)
+        #cfm_plot = plot_confusion_matrix(confusion_mat, some_label,some_pred)
+        # cfm = [[35, 0, 6],
+        #        [0, 0, 3],
+        #        [5, 50, 1]]
+        df_cfm = pd.DataFrame(cfm, index=classes, columns=classes)
+        plt.figure(figsize=(10, 7))
+        cfm_plot = sn.heatmap(df_cfm, annot=True)
+        cfm_plot.figure.savefig("cfm.png")
         # plot_confusion_matrix(cm=confusion_matrix(y_true=all_label, y_pred=all_pred),
         #                       classes=classes)
         print('Test Accuracy of the model on the 2000 test images: {} %'.format(100 * correct / total))
