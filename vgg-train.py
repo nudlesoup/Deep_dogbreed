@@ -43,15 +43,19 @@ def plot_confusion_matrix(cm, classes,
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
 
     thresh = cm.max() / 2.
-    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+    for i, j in itertools.product(range(25), range(25)):
         plt.text(j, i, cm[i, j],
                  horizontalalignment="center",
                  color="white" if cm[i, j] > thresh else "black")
+    # for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+    #     plt.text(j, i, cm[i, j],
+    #              horizontalalignment="center",
+    #              color="white" if cm[i, j] > thresh else "black")
 
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.savefig('vgg-confusionmatrix-normal-{}.png'.format(args.name))
+    plt.savefig('vgg-confusionmatrix-normal-25.png'.format(args.name))
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
