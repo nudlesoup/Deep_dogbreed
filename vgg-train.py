@@ -254,11 +254,16 @@ def main(args):
 
         all_pred = torch.tensor(all_preds)
         all_label = torch.tensor(all_labels)
+        le = LabelEncoder()
+        targets = le.fit_transform(classes)
+        # targets: array([0, 1, 2, 3])
+
+        targets = torch.as_tensor(targets)
         n=len(all_pred)
         some_pred=[]
         some_label=[]
         for i in range(n):
-            if all_label[i] in classes:
+            if all_label[i] in targets:
                 some_pred.append(all_pred[i])
                 some_label.append(all_label[i])
 
