@@ -69,13 +69,13 @@ class ComplexDog(nn.Module):
         super(ComplexDog, self).__init__()
 
         model_vgg = models.vgg19(pretrained=True)
-        self.vgg = model_vgg
+
         for name, param in model_vgg.named_parameters():
             if ("bn" not in name):
                 param.requires_grad = False
 
-        model.classifier[6] = nn.Linear(4096, 512)
-
+        model_vgg.classifier[6] = nn.Linear(4096, 512)
+        self.vgg = model_vgg
         self.rfc1 = nn.Linear(512, 512)
         #model_dense=models.densenet121(pretrained=True)
         model_dense=models.densenet121(pretrained=True)
@@ -96,15 +96,7 @@ class ComplexDog(nn.Module):
     def forward(self, x):
         y = x.detach().clone()
 
-        x = self.resnet.conv1(x)
-        x = self.resnet.bn1(x)
-        x = self.resnet.relu(x)
-        x = self.resnet.maxpool(x)
-        x = self.resnet.layer1(x)
-        x = self.resnet.layer2(x)
-        x = self.resnet.layer3(x)
-        x = self.resnet.layer4(x)
-        x = self.resnet.avgpool(x)
+        x = self.vgg(x)
         x = x.view(x.size(0), -1)
         x = nn.functional.relu(self.rfc1(x))
 
