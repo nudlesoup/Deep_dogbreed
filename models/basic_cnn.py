@@ -18,7 +18,7 @@ class ConvNet(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
-        self.fc = nn.Linear(7 * 7 * 32, num_classes)
+        self.fc = nn.Linear(7 * 7 * 32, 120)
 
     def forward(self, x):
         out = self.layer1(x)
@@ -58,7 +58,7 @@ class Net(nn.Module):
         # linear layer (7 * 7 * 512 -> 500)
         self.fc_01 = nn.Linear(512 * 7 * 7, 4096)
         # linear layer (4096 -> 133)
-        self.fc_02 = nn.Linear(4096, 133)
+        self.fc_02 = nn.Linear(4096, 120)
         # dropout layer (p = 0.50)
         self.dropout = nn.Dropout(0.50)
 

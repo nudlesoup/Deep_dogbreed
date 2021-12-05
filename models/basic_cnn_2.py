@@ -30,7 +30,7 @@ class DogNet(nn.Module):
             nn.Linear(28 * 28 * 64, 1024),
             nn.ReLU(),
             nn.Dropout(p=0.2),
-            nn.Linear(1024, 133)
+            nn.Linear(1024, 120)
         )
 
     def forward(self, x):
