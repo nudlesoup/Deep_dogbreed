@@ -8,17 +8,17 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 class Complex(nn.Module):
     def __init__(self):
         super(Complex, self).__init__()
-
-        self.resnet = models.resnet18(pretrained=True)
-        for name, param in resnet.named_parameters():
+        model_res = models.resnet18(pretrained=True)
+        self.resnet = model_res
+        for name, param in model_res.named_parameters():
             if ("bn" not in name):
                 param.requires_grad = False
 
         # for param in _resnet.parameters():
         #     param.requires_grad = False
         self.rfc1 = nn.Linear(512, 512)
-
-        self.densenet = models.densenet121(pretrained=True)
+        model_dense=models.densenet121(pretrained=True)
+        self.densenet = model_dense
 
         for name, param in densenet.named_parameters():
             if ("bn" not in name):
