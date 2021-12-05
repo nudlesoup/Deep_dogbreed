@@ -149,7 +149,7 @@ class ComplexDogAlex(nn.Module):
         x = nn.functional.relu(self.rfc1(x))
 
         #y = self.densenet.features(y)
-        y = self.alexnet.features(x)
+        y = self.alexnet(y)
         y = F.relu(y)
         y = F.adaptive_avg_pool2d(y, (1, 1))
         y = y.view(y.size(0), -1)
