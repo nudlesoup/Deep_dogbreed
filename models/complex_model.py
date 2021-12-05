@@ -62,3 +62,61 @@ class Complex(nn.Module):
         x = self.final_fc2(x)
 
         return x
+
+
+class ComplexDog(nn.Module):
+    def __init__(self):
+        super(ComplexDog, self).__init__()
+
+        model_vgg = models.vgg19(pretrained=True)
+        self.vgg = model_vgg
+        for name, param in model_res.named_parameters():
+            if ("bn" not in name):
+                param.requires_grad = False
+
+        model.classifier[6] = nn.Linear(4096, 512)
+
+        self.rfc1 = nn.Linear(512, 512)
+        #model_dense=models.densenet121(pretrained=True)
+        model_dense=models.densenet121(pretrained=True)
+
+        self.densenet = model_dense
+
+        for name, param in model_dense.named_parameters():
+            if ("bn" not in name):
+                param.requires_grad = False
+
+
+        self.dfc1 = nn.Linear(1024, 512)
+
+        self.final_fc1 = nn.Linear(1024, 512)
+        self.final_fc2 = nn.Linear(512, 120)
+        self.dropout = nn.Dropout(0.2)
+
+    def forward(self, x):
+        y = x.detach().clone()
+
+        x = self.resnet.conv1(x)
+        x = self.resnet.bn1(x)
+        x = self.resnet.relu(x)
+        x = self.resnet.maxpool(x)
+        x = self.resnet.layer1(x)
+        x = self.resnet.layer2(x)
+        x = self.resnet.layer3(x)
+        x = self.resnet.layer4(x)
+        x = self.resnet.avgpool(x)
+        x = x.view(x.size(0), -1)
+        x = nn.functional.relu(self.rfc1(x))
+
+        y = self.densenet.features(y)
+        y = F.relu(y)
+        y = F.adaptive_avg_pool2d(y, (1, 1))
+        y = y.view(y.size(0), -1)
+        y = nn.functional.relu(self.dfc1(y))
+
+        x = torch.cat((x, y), 1)
+        x = nn.functional.relu(self.final_fc1(x))
+        x = self.dropout(x)
+        x = self.final_fc2(x)
+
+        return x
