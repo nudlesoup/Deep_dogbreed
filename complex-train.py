@@ -170,7 +170,7 @@ def main(args):
     print(f'Number of validation examples: {len(valid_data)}')
     print(f'Number of testing examples: {len(test_data)}')
 
-    model = models.complex_model.ComplexDog().to(device)
+    model = models.complex_model.ComplexDogAlex().to(device)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
