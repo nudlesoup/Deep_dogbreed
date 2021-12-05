@@ -125,12 +125,12 @@ class ComplexDogAlex(nn.Module):
         self.vgg = model_vgg
         self.rfc1 = nn.Linear(512, 512)
         #model_dense=models.densenet121(pretrained=True)
-        model_dense=models.alexnet(pretrained=True)
-        model_dense.classifier[6] = nn.Linear(4096, 512)
+        model_alex=models.alexnet(pretrained=True)
+        model_alex.classifier[6] = nn.Linear(4096, 512)
 
-        self.densenet = model_dense
+        self.alexnet = model_alex
 
-        for name, param in model_dense.named_parameters():
+        for name, param in model_alex.named_parameters():
             if ("bn" not in name):
                 param.requires_grad = False
 
@@ -148,7 +148,8 @@ class ComplexDogAlex(nn.Module):
         x = x.view(x.size(0), -1)
         x = nn.functional.relu(self.rfc1(x))
 
-        y = self.densenet.features(y)
+        #y = self.densenet.features(y)
+        y = self.alexnet(x)
         y = F.relu(y)
         y = F.adaptive_avg_pool2d(y, (1, 1))
         y = y.view(y.size(0), -1)
