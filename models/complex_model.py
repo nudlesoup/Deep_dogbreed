@@ -161,3 +161,54 @@ class ComplexDogAlex(nn.Module):
         x = self.final_fc2(x)
 
         return x
+
+class ComplexDogVgg(nn.Module):
+    def __init__(self):
+        super(ComplexDogVgg, self).__init__()
+
+        model_vgg = models.vgg19(pretrained=True)
+
+        for name, param in model_vgg.named_parameters():
+            if ("bn" not in name):
+                param.requires_grad = False
+
+        model_vgg.classifier[6] = nn.Linear(4096, 512)
+        self.vgg = model_vgg
+        self.rfc1 = nn.Linear(512, 512)
+        #model_dense=models.densenet121(pretrained=True)
+        model_alex=models.vgg19(pretrained=True)
+        model_alex.classifier[6] = nn.Linear(4096, 512)
+
+        self.alexnet = model_alex
+
+        for name, param in model_alex.named_parameters():
+            if ("bn" not in name):
+                param.requires_grad = False
+
+
+        self.dfc1 = nn.Linear(512, 512)
+
+        self.final_fc1 = nn.Linear(1024, 512)
+        self.final_fc2 = nn.Linear(512, 120)
+        self.dropout = nn.Dropout(0.2)
+
+    def forward(self, x):
+        y = x.detach().clone()
+
+        x = self.vgg(x)
+        x = x.view(x.size(0), -1)
+        x = nn.functional.relu(self.rfc1(x))
+
+        #y = self.densenet.features(y)
+        y = self.alexnet(y)
+        y = F.relu(y)
+        #y = F.adaptive_avg_pool2d(y, (1, 1))
+        y = y.view(y.size(0), -1)
+        y = nn.functional.relu(self.dfc1(y))
+
+        x = torch.cat((x, y), 1)
+        x = nn.functional.relu(self.final_fc1(x))
+        #x = self.dropout(x)
+        x = self.final_fc2(x)
+
+        return x
