@@ -20,7 +20,7 @@ class Complex(nn.Module):
         model_dense=models.densenet121(pretrained=True)
         self.densenet = model_dense
 
-        for name, param in densenet.named_parameters():
+        for name, param in model_dense.named_parameters():
             if ("bn" not in name):
                 param.requires_grad = False
 
