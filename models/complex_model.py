@@ -70,7 +70,7 @@ class ComplexDog(nn.Module):
 
         model_vgg = models.vgg19(pretrained=True)
         self.vgg = model_vgg
-        for name, param in model_res.named_parameters():
+        for name, param in model_vgg.named_parameters():
             if ("bn" not in name):
                 param.requires_grad = False
 
