@@ -113,7 +113,7 @@ class ComplexDog(nn.Module):
 
 class ComplexDogAlex(nn.Module):
     def __init__(self):
-        super(ComplexDog, self).__init__()
+        super(ComplexDogAlex, self).__init__()
 
         model_vgg = models.vgg19(pretrained=True)
 
