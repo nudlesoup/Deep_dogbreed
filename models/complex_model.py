@@ -10,10 +10,21 @@ class Complex(nn.Module):
         super(Complex, self).__init__()
 
         self.resnet = models.resnet18(pretrained=True)
+        for name, param in resnet.named_parameters():
+            if ("bn" not in name):
+                param.requires_grad = False
 
+        # for param in _resnet.parameters():
+        #     param.requires_grad = False
         self.rfc1 = nn.Linear(512, 512)
 
         self.densenet = models.densenet121(pretrained=True)
+
+        for name, param in densenet.named_parameters():
+            if ("bn" not in name):
+                param.requires_grad = False
+
+
         self.dfc1 = nn.Linear(1024, 512)
 
         self.final_fc1 = nn.Linear(1024, 512)
