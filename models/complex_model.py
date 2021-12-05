@@ -176,7 +176,7 @@ class ComplexDogVgg(nn.Module):
         self.vgg = model_vgg
         self.rfc1 = nn.Linear(512, 512)
         #model_dense=models.densenet121(pretrained=True)
-        model_alex=models.vgg19(pretrained=True)
+        model_alex=models.inception_v3(pretrained=True)
         model_alex.classifier[6] = nn.Linear(4096, 512)
 
         self.alexnet = model_alex
