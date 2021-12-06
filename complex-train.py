@@ -170,7 +170,7 @@ def main(args):
     print(f'Number of validation examples: {len(valid_data)}')
     print(f'Number of testing examples: {len(test_data)}')
 
-    model = models.complex_model.ComplexDogVgg().to(device)
+    model = models.complex_model.ComplexDog().to(device)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
@@ -224,21 +224,44 @@ def main(args):
             all_labels.extend(labels)
             all_preds.extend(predicted)
 
-
-        classes = ['affenpinscher','afghan_hound','african_hunting_dog','airedale','american_staffordshire_terrier','appenzeller','australian_terrier','basenji','basset','beagle','bedlington_terrier','bernese_mountain_dog','black-and-tan_coonhound','blenheim_spaniel','bloodhound','bluetick','border_collie','border_terrier','borzoi','boston_bull','bouvier_des_flandres','boxer','brabancon_griffon','briard','brittany_spaniel','bull_mastiff','cairn','cardigan','chesapeake_bay_retriever','chihuahua','chow','clumber','cocker_spaniel','collie','curly-coated_retriever','dandie_dinmont','dhole','dingo','doberman','english_foxhound','english_setter','english_springer','entlebucher','eskimo_dog','flat-coated_retriever','french_bulldog','german_shepherd','german_short-haired_pointer','giant_schnauzer','golden_retriever','gordon_setter','great_dane','great_pyrenees','greater_swiss_mountain_dog','groenendael','ibizan_hound','irish_setter','irish_terrier','irish_water_spaniel','irish_wolfhound','italian_greyhound','japanese_spaniel','keeshond','kelpie','kerry_blue_terrier','komondor','kuvasz','labrador_retriever','lakeland_terrier','leonberg','lhasa','malamute','malinois','maltese_dog','mexican_hairless','miniature_pinscher','miniature_poodle','miniature_schnauzer','newfoundland','norfolk_terrier','norwegian_elkhound','norwich_terrier','old_english_sheepdog','otterhound','papillon','pekinese','pembroke','pomeranian','pug','redbone','rhodesian_ridgeback','rottweiler','saint_bernard','saluki','samoyed','schipperke','scotch_terrier','scottish_deerhound','sealyham_terrier','shetland_sheepdog','shih-tzu','siberian_husky','silky_terrier','soft-coated_wheaten_terrier','staffordshire_bullterrier','standard_poodle','standard_schnauzer','sussex_spaniel','tibetan_mastiff','tibetan_terrier','toy_poodle','toy_terrier','vizsla','walker_hound','weimaraner','welsh_springer_spaniel','west_highland_white_terrier','whippet','wire-haired_fox_terrier','yorkshire_terrier']
-
+        classes = ['affenpinscher', 'afghan_hound', 'african_hunting_dog', 'airedale', 'american_staffordshire_terrier',
+                   'appenzeller', 'australian_terrier', 'basenji', 'basset', 'beagle', 'bedlington_terrier',
+                   'bernese_mountain_dog', 'black-and-tan_coonhound', 'blenheim_spaniel', 'bloodhound', 'bluetick',
+                   'border_collie', 'border_terrier', 'borzoi', 'boston_bull', 'bouvier_des_flandres', 'boxer',
+                   'brabancon_griffon', 'briard', 'brittany_spaniel', 'bull_mastiff', 'cairn', 'cardigan',
+                   'chesapeake_bay_retriever', 'chihuahua', 'chow', 'clumber', 'cocker_spaniel']
         all_pred = torch.tensor(all_preds)
         all_label = torch.tensor(all_labels)
-        print(classification_report(all_label, all_pred, target_names=classes))
-        confusion_mat = confusion_matrix(y_true=all_label, y_pred=all_pred)
-        #print(confusion_mat)
-        #f = open("resnet-confusion-matrix-{}.txt".format(args.name), "w")
-        with open("comlpex-confusion-matrix-{}.txt".format(args.name), 'w') as f:
-            f.write(np.array2string(confusion_mat, separator=', '))
-        # f.write(str(confusion_mat))
-        f.close()
-        plot_confusion_matrix(cm=confusion_matrix(y_true=all_label, y_pred=all_pred),
-                              classes=classes)
+        le = LabelEncoder()
+        targets = le.fit_transform(classes)
+        targets = torch.as_tensor(targets)
+        n = len(all_pred)
+        some_pred = []
+        some_label = []
+        for i in range(n):
+            if all_label[i] in targets and all_pred[i] in targets:
+                some_pred.append(all_pred[i])
+                some_label.append(all_label[i])
+
+        cfm = confusion_matrix(y_true=some_label, y_pred=some_pred)
+        df_cfm = pd.DataFrame(cfm, index=classes, columns=classes)
+        plt.figure(figsize=(10, 7))
+        cfm_plot = sn.heatmap(df_cfm, annot=True)
+        cfm_plot.figure.savefig("cfm3.png")
+        # classes = ['affenpinscher','afghan_hound','african_hunting_dog','airedale','american_staffordshire_terrier','appenzeller','australian_terrier','basenji','basset','beagle','bedlington_terrier','bernese_mountain_dog','black-and-tan_coonhound','blenheim_spaniel','bloodhound','bluetick','border_collie','border_terrier','borzoi','boston_bull','bouvier_des_flandres','boxer','brabancon_griffon','briard','brittany_spaniel','bull_mastiff','cairn','cardigan','chesapeake_bay_retriever','chihuahua','chow','clumber','cocker_spaniel','collie','curly-coated_retriever','dandie_dinmont','dhole','dingo','doberman','english_foxhound','english_setter','english_springer','entlebucher','eskimo_dog','flat-coated_retriever','french_bulldog','german_shepherd','german_short-haired_pointer','giant_schnauzer','golden_retriever','gordon_setter','great_dane','great_pyrenees','greater_swiss_mountain_dog','groenendael','ibizan_hound','irish_setter','irish_terrier','irish_water_spaniel','irish_wolfhound','italian_greyhound','japanese_spaniel','keeshond','kelpie','kerry_blue_terrier','komondor','kuvasz','labrador_retriever','lakeland_terrier','leonberg','lhasa','malamute','malinois','maltese_dog','mexican_hairless','miniature_pinscher','miniature_poodle','miniature_schnauzer','newfoundland','norfolk_terrier','norwegian_elkhound','norwich_terrier','old_english_sheepdog','otterhound','papillon','pekinese','pembroke','pomeranian','pug','redbone','rhodesian_ridgeback','rottweiler','saint_bernard','saluki','samoyed','schipperke','scotch_terrier','scottish_deerhound','sealyham_terrier','shetland_sheepdog','shih-tzu','siberian_husky','silky_terrier','soft-coated_wheaten_terrier','staffordshire_bullterrier','standard_poodle','standard_schnauzer','sussex_spaniel','tibetan_mastiff','tibetan_terrier','toy_poodle','toy_terrier','vizsla','walker_hound','weimaraner','welsh_springer_spaniel','west_highland_white_terrier','whippet','wire-haired_fox_terrier','yorkshire_terrier']
+        #
+        # all_pred = torch.tensor(all_preds)
+        # all_label = torch.tensor(all_labels)
+        # print(classification_report(all_label, all_pred, target_names=classes))
+        # confusion_mat = confusion_matrix(y_true=all_label, y_pred=all_pred)
+        # #print(confusion_mat)
+        # #f = open("resnet-confusion-matrix-{}.txt".format(args.name), "w")
+        # with open("comlpex-confusion-matrix-{}.txt".format(args.name), 'w') as f:
+        #     f.write(np.array2string(confusion_mat, separator=', '))
+        # # f.write(str(confusion_mat))
+        # f.close()
+        # plot_confusion_matrix(cm=confusion_matrix(y_true=all_label, y_pred=all_pred),
+        #                       classes=classes)
         print('Test Accuracy of the model on the 2000 test images: {} %'.format(100 * correct / total))
 
 

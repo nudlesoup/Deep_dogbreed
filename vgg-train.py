@@ -273,7 +273,7 @@ def main(args):
                 some_label.append(all_label[i])
 
         #print(classification_report(all_label, all_pred, target_names=classes))
-        cfm = confusion_matrix(y_true=some_label, y_pred=some_pred)
+
         # with open("vgg-dataaug-confusion-matrix-{}.txt".format(args.name), 'w') as f:
         #     f.write(np.array2string(confusion_mat, separator=', '))
         # # f = open("vgg-dataaug-confusion-matrix-{}.txt".format(args.name), "w")
@@ -285,6 +285,7 @@ def main(args):
         # cfm = [[35, 0, 6],
         #        [0, 0, 3],
         #        [5, 50, 1]]
+        cfm = confusion_matrix(y_true=some_label, y_pred=some_pred)
         df_cfm = pd.DataFrame(cfm, index=classes, columns=classes)
         plt.figure(figsize=(10, 7))
         cfm_plot = sn.heatmap(df_cfm, annot=True)
